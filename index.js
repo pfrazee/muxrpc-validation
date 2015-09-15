@@ -55,14 +55,15 @@ module.exports.async = function (fn) {
   var spec = Array.prototype.slice.call(arguments, 1)
   return function () {
     var args = Array.prototype.slice.call(arguments)
+    var hasCb = (typeof args[args.length - 1] == 'function')
 
     // get cb
-    var cb = (typeof args[args.length - 1] == 'function')
+    var cb = (hasCb)
       ? args[args.length - 1]
       : function (err) { if (err) { throw err; } }
 
     // run validation
-    var err = validate(args, spec)
+    var err = validate((hasCb) ? args.slice(0,args.length-1) : args, spec)
     if (err) return cb(err)
 
     // run async fn

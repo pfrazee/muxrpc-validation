@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/pfraze/muxrpc-validation/issues"
   },
-  "homepage": "https://github.com/pfraze/muxrpc-validation#readme"
+  "homepage": "https://github.com/pfraze/muxrpc-validation#readme",
+  "dependencies": {
+    "pull-stream": "^2.28.3",
+    "zerr": "^1.0.1"
+  }
 }

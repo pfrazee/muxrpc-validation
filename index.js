@@ -114,8 +114,8 @@ function validate (args, spec) {
     for (var j=0; j < types.length; j++) {
       var type = types[j]
 
-      // no value?
-      if (typeof args[i] == 'undefined') {
+      // falsey?
+      if (!args[i]) {
         err = (type.optional) ? false : errs.MissingParam(''+i)
         break
       }

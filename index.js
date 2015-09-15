@@ -56,7 +56,7 @@ module.exports.sync = function (fn) {
     if (err) throw err
 
     // run sync fn
-    return apply(fn, args)
+    return apply(this, fn, args)
   }
 }
 module.exports.sink = 
@@ -76,7 +76,7 @@ module.exports.async = function (fn) {
     if (err) return cb(err)
 
     // run async fn
-    return apply(fn, args)
+    return apply(this, fn, args)
   }
 }
 module.exports.source = function (fn) {
@@ -89,7 +89,7 @@ module.exports.source = function (fn) {
     if (err) return pull.error(err)
 
     // run stream fn
-    return apply(fn, args)
+    return apply(this, fn, args)
   }
 }
 
@@ -152,16 +152,16 @@ function parse (token) {
 }
 
 // helper to avoid apply, for performance
-function apply (fn, args) {
+function apply (self, fn, args) {
   if (args.length == 0)
-    return fn()
+    return fn.call(self)
   if (args.length == 1)
-    return fn(args[0])
+    return fn.call(self, args[0])
   if (args.length == 2)
-    return fn(args[0], args[1])
+    return fn.call(self, args[0], args[1])
   if (args.length == 3)
-    return fn(args[0], args[1], args[2])
+    return fn.call(self, args[0], args[1], args[2])
   if (args.length == 4)
-    return fn(args[0], args[1], args[2], args[3])
-  return fn.apply(null, args)
+    return fn.call(self, args[0], args[1], args[2], args[3])
+  return fn.apply(self, args)
 }

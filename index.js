@@ -30,6 +30,10 @@ var validators = {
   array: function (param, n) {
     if (!Array.isArray(param))
       return 'type'
+  },
+  function: function (param, n) {
+    if (typeof param != 'function')
+      return 'type'
   }
 }
 

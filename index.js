@@ -59,6 +59,7 @@ module.exports.sync = function (fn) {
     return apply(fn, args)
   }
 }
+module.exports.sink = 
 module.exports.async = function (fn) {
   var spec = Array.prototype.slice.call(arguments, 1)
   return function () {
@@ -78,8 +79,7 @@ module.exports.async = function (fn) {
     return apply(fn, args)
   }
 }
-module.exports.source =
-module.exports.sink = function (fn) {
+module.exports.source = function (fn) {
   var spec = Array.prototype.slice.call(arguments, 1)
   return function () {
     var args = Array.prototype.slice.call(arguments)

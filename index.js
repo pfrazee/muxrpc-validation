@@ -42,7 +42,11 @@ module.exports.get = function (name) {
   return validators[name]
 }
 module.exports.set = function (name, fn) {
-  validators[name] = fn
+  if (name && typeof name == 'object')
+    for (var k in name) 
+      module.exports.set(k, name[k])
+  else
+    validators[name] = fn
 }
 
 // rpc method wrappers

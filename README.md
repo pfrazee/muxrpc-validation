@@ -3,8 +3,15 @@
 Validation library for [muxrpc](https://npm.im/muxrpc) apis.
 
 ```js
-var valid = require('muxrpc-validation')
+// create validator library
+var valid = require('muxrpc-validation')({
+  queryOpts: function (v) {
+    if (v.reverse && typeof v.reverse != 'boolean')
+      return new TypeError('opts.reverse must be a bool')
+  }
+})
 
+// api manifest
 var manifest = {
   usage: 'sync',
   get:   'async',
@@ -12,7 +19,7 @@ var manifest = {
   list:  'source'
 }
 
-// wrap the functions in the validators
+// api definition - wrap the functions in the validators
 var api = {
   usage:   valid.sync(usage, 'string|boolean'), // multiple types
   get:     valid.async(get, 'string'),
@@ -20,13 +27,6 @@ var api = {
   list:    valid.source(list, 'queryOpts?') // optional param
 }
 
-// register special validators
-valid.set('queryOpts', function (v) {
-  if (v.reverse && typeof v.reverse != 'boolean')
-    return new TypeError('opts.reverse must be a bool')
-})
-
-// function defs:
 function usage (cmd) {
   // ...
 }

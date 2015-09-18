@@ -12,7 +12,7 @@ module.exports = function (addedValidators) {
   api.set = function (name, fn) {
     if (name && typeof name == 'object')
       for (var k in name) 
-        api.set(k, name[k])
+        api.set(k, name[k].bind(api))
     else
       validators[name] = fn
   }
@@ -127,7 +127,7 @@ module.exports = function (addedValidators) {
         var validator = validators[type.name]
         if (!validator)
           throw new Error('Validator not found: ' + type.name)
-        err = validator.call(api, args[i], ''+i)
+        err = validator(args[i], ''+i)
 
         // did the validator pass? break out of this type
         if (!err)

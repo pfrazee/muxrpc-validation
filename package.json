@@ -1,6 +1,6 @@
 {
   "name": "muxrpc-validation",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Validation library for muxrpc apis",
   "main": "index.js",
   "scripts": {

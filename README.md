@@ -24,6 +24,7 @@ var api = {
   usage:   valid.sync(usage, 'string|boolean'), // multiple types
   get:     valid.async(get, 'string'),
   add:     valid.async(add, ['string'], ['string', 'object']), // multiple signatures
+  put:     valid.async(add, {cbOptional: true}, 'string'), // async method works without a cb
   list:    valid.source(list, 'queryOpts?') // optional param
 }
 

@@ -62,12 +62,16 @@ module.exports = function (addedValidators) {
       return apply(this, fn, args)
     }
   }
-  api.sink = 
   api.async = function (fn) {
     var spec = Array.prototype.slice.call(arguments, 1)
+    var opts = (typeof spec[0] == 'object' && !Array.isArray(spec[0])) ? spec.shift() : {}
     return function () {
       var args = Array.prototype.slice.call(arguments)
       var hasCb = (typeof args[args.length - 1] == 'function')
+
+      // cb validation
+      if (!hasCb && !opts.cbOptional)
+        throw errs.MissingCallback()
 
       // get cb
       var cb = (hasCb)
@@ -95,6 +99,25 @@ module.exports = function (addedValidators) {
       return apply(this, fn, args)
     }
   }
+  api.sink = function (fn) {
+    var spec = Array.prototype.slice.call(arguments, 1)
+    return function () {
+      var args = Array.prototype.slice.call(arguments)
+      var hasCb = (typeof args[args.length - 1] == 'function')
+
+      // get cb
+      var cb = (hasCb)
+        ? args[args.length - 1]
+        : function (err) { if (err) { throw err; } }
+
+      // run validation
+      var err = validate((hasCb) ? args.slice(0,args.length-1) : args, spec)
+      if (err) return cb(err)
+
+      // run async fn
+      return apply(this, fn, args)
+    }
+  }
 
   // run validation against a spec
   function validate (args, spec) {
@@ -117,8 +140,8 @@ module.exports = function (addedValidators) {
       for (var j=0; j < types.length; j++) {
         var type = types[j]
 
-        // falsey?
-        if (!args[i]) {
+        // falsey? or final cb?
+        if (!args[i] || typeof args[i] === 'function') {
           err = (type.optional) ? false : errs.MissingParam(''+i)
           break
         }
@@ -150,6 +173,7 @@ module.exports = function (addedValidators) {
 
 var errs =
 module.exports.errors = {
+  MissingCallback: zerr('Usage', 'Callback parameter is required'),
   MissingParam: zerr('Usage', 'Param % is required'),
   Type: zerr('Type', 'Param % must by of type %')
 }

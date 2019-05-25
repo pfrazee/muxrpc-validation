@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/pfraze/muxrpc-validation#readme",
   "dependencies": {
-    "pull-stream": "^2.28.3",
+    "pull-stream": "^3.6.11",
     "zerr": "^1.0.1"
   }
 }
